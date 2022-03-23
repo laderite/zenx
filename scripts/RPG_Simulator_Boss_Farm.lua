@@ -227,7 +227,7 @@ pcall(function()
 function sell()
     if getgenv().settings['autosell']['enabled'] then
         for _,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Frame.ScrollingFrame:GetChildren()) do
-            if v:IsA('TextButton') and v:FindFirstChild('ItemName').Value ~= "" then
+            if v:IsA('TextButton') and v:FindFirstChild('ItemName').Value ~= "" and v:FindFirstChild('EquippedLabel') == nil then
                 local name = v.ItemName.Value
                 local ID = v.ID.Value
                 
