@@ -230,11 +230,18 @@ function sell()
             if v:IsA('TextButton') and v:FindFirstChild('ItemName').Value ~= "" and v:FindFirstChild('EquippedLabel') == nil then
                 local name = v.ItemName.Value
                 local ID = v.ID.Value
-                
-                if table.find(getgenv().settings['autosell']['items'], name) then
-                    
-                    local args = {[1] = "Sell",[2] = {[1] = {[1] = ID}}}
-                    game:GetService("ReplicatedStorage").Events.inventory:FireServer(unpack(args))
+                if v:FindFirstChild("Amount") then
+                    if table.find(getgenv().settings['autosell']['items'], name) then
+                        local amount = v.Amount.Text
+                        local args = {[1] = "Sell",[2] = {[1] = {[1] = ID,[2] = amount}}}
+                        game:GetService("ReplicatedStorage").Events.inventory:FireServer(unpack(args))
+                    end
+                else
+                    if table.find(getgenv().settings['autosell']['items'], name) then
+                        
+                        local args = {[1] = "Sell",[2] = {[1] = {[1] = ID}}}
+                        game:GetService("ReplicatedStorage").Events.inventory:FireServer(unpack(args))
+                    end
                 end
             end
         end
