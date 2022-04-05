@@ -1,1 +1,1 @@
-return "https://discord.gg/zenhub"
+return "https://discord.gg/zen"
