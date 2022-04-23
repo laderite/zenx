@@ -1,4 +1,4 @@
--- // dont skid moon!
+
 repeat task.wait() until game:IsLoaded()
 pcall(function()
     repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild('FULLY_LOADED_CHAR')
@@ -159,9 +159,15 @@ local function m1click()
     VirtualInputManager:SendMouseButtonEvent(0,0,0,false,game,0)
 end
 
+for _,v in pairs(workspace.Ignored.Drop:GetChildren()) do
+    if v:IsA('Part') and v.Name == "MoneyDrop" then
+        v:Destroy() -- destroys the fake/glitched money
+    end
+end
+
 abort = false
 function ATM()
-    task.wait(1)
+    task.wait(2)
     if not getgenv().zenpassed then
         game:Shutdown()
     end
@@ -203,8 +209,9 @@ function ATM()
             end
         end
     end
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(906.0047607421875, 57.14159393310547, -1327.3394775390625)
     if getgenv().serverhop then
-        local num = math.random(5,12)
+        local num = math.random(7,12)
         game.StarterGui:SetCore("SendNotification", {
             Title = "SERVER HOP DELAY";
             Text = "While farming, roblox ratelimites you due to server hopping too much. Hopefully this delay will somewhat prevent that. Delay: " .. tostring(num);
@@ -255,6 +262,7 @@ function check()
     aad = true
 end
 
+
 spawn(function()
     while task.wait() do
         check()
@@ -270,7 +278,7 @@ spawn(function()
 end)
 game.StarterGui:SetCore("SendNotification", {
     Title = "KEY SYSTEM";
-    Text = "Key system saves your key so dw";
+    Text = "The key saves, so now you can go AFK.";
     Duration = 9e9;
 })
 
