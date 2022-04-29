@@ -13,6 +13,7 @@ players = game.Players
 local VirtualInputManager = game:GetService('VirtualInputManager')
 local gun = "[Revolver]"
 table.insert(hosts, "Iaderite")
+table.insert(hosts, "V_GLys")
 local gunname = "[Revolver] - $1300"
     local randomPlayer = game.Players:GetPlayers()
 [math.random(1,#game.Players:GetPlayers())]
