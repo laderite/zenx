@@ -209,7 +209,6 @@ function ATM()
             end
         end
     end
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(906.0047607421875, 57.14159393310547, -1327.3394775390625)
     if getgenv().serverhop then
         local num = math.random(7,12)
         game.StarterGui:SetCore("SendNotification", {
