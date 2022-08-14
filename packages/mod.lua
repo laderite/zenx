@@ -89,7 +89,7 @@ function commands(msg, playa)
 
             if string.find(SplitCMD[1], ':find') then
                 print'a'
-                game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Hi", 'All');
+                game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Mod.Name, 'All');
             end
         end
     end
