@@ -288,13 +288,13 @@ task.spawn(function()
     
      
 
-    ts:Teleport(7127407851, p)
+    ts:Teleport(7229033818, p)
     log('Teleprting to main screen', 'DEBUG')
 end)
 
 getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
     if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
-        game:GetService("TeleportService"):Teleport(7127407851)
+        game:GetService("TeleportService"):Teleport(7229033818)
     end
 end)
 time = 0
