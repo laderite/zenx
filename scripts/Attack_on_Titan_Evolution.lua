@@ -1,7 +1,19 @@
+getgenv().Settings = {
+    Map = "PLAINS", -- map must be in all caps
+    Difficulty = "Abnormal", -- proper case, Easy, Medium, Hard, Extreme, Abnormal
+    Speed = 600, -- tween speed to use to get to nearest titan
+    Speed2 = 400 -- tween speed to use if <50 studs within titan (prevents kicking at times)
+    LeaveTimer = 200 -- in seconds, in case if u get stuck or wtv (put it to 9999999 if u dont want it to leave lol)
+}
+
 -- beginning of code, if you found a speed bypass, lmk if u want to thx, 'j#0499
 -- and btw this is really really bad code and a lot of it from my other projects bc i haven't made a script ln like 2-3 months lol
 
 repeat wait(1) until game:IsLoaded()
+
+if getgenv().Settings.LeaveTimer == nil then
+    getgenv().Settings.LeaveTimer 300
+end
 
 function log(message, type)
     if type == "WARN" then
@@ -276,7 +288,7 @@ if iflobby ~= nil then
 end
 
 task.spawn(function()
-    wait(200)
+    wait(getgenv().Settings.LeaveTimer)
     
     local ts = game:GetService("TeleportService")
 
