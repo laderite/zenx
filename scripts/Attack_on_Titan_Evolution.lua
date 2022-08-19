@@ -315,6 +315,13 @@ end
 task.spawn(killTouchh)
 log('Script loaded', "DEBUG")
 
+pcall(function() game.StarterGui:SetCore("SendNotification", {
+    Title = "IF U GET NO REWARDS";
+    Text = "if u get no rewards, lower ur tween speed. the game made it so u only get rewards when you complete it above 2 mins. they'l prob remove it soon";
+    Icon = "rbxassetid://57254792";
+    Duration = 1337;
+}) end)
+
 local Time =
 (game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(200, 0, 200) -
 game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude / 100
