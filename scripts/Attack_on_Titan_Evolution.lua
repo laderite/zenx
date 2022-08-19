@@ -322,6 +322,20 @@ pcall(function() game.StarterGui:SetCore("SendNotification", {
     Duration = 1337;
 }) end)
 
+pcall(function() game.StarterGui:SetCore("SendNotification", {
+    Title = "IF U DONT INSTAKILL";
+    Text = "upgrade the damage on ur odm, there is no instakill";
+    Icon = "rbxassetid://57254792";
+    Duration = 1337;
+}) end)
+
+pcall(function() game.StarterGui:SetCore("SendNotification", {
+    Title = "made by jsn#0499";
+    Text = "made by jsn#0499, if u have bugs or questions dm me";
+    Icon = "rbxassetid://57254792";
+    Duration = 1337;
+}) end)
+
 local Time =
 (game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(200, 0, 200) -
 game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude / 100
