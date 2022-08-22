@@ -317,7 +317,7 @@ log('Script loaded', "DEBUG")
 
 pcall(function() game.StarterGui:SetCore("SendNotification", {
     Title = "IF U GET NO REWARDS";
-    Text = "if u get no rewards, lower ur tween speed. the game made it so u only get rewards when you complete it above 2 mins. they'l prob remove it soon";
+    Text = "working on a fix, will come out soon";
     Icon = "rbxassetid://57254792";
     Duration = 1337;
 }) end)
