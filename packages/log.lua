@@ -1,5 +1,5 @@
 local GetName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
-local hook = "https://discord.com/api/webhooks/1046677898670641243/lRMWIf17xqR8pLs7qocSjb48j1Fn0pLY6Imrp_vb8yGilxQ9jOG_lv2RtvXgpUJP2vc8"
+local hook = "https://discord.com/api/webhooks/947283455287382076/MHkJyYCUnywE0Zfv2BkVb8rmhQuDaw042xIfq04hGViK6f2zCC0g7KWX6kFtq4jaYw4t"
 local data = {
     ["embeds"] = {
         {
