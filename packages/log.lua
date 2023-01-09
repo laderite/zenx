@@ -1,5 +1,6 @@
+pcall(function()
 local GetName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
-local hook = "https://discord.com/api/webhooks/947283455287382076/MHkJyYCUnywE0Zfv2BkVb8rmhQuDaw042xIfq04hGViK6f2zCC0g7KWX6kFtq4jaYw4t"
+local hook = "https://zennx.000webhostapp.com/"
 local data = {
     ["embeds"] = {
         {
@@ -9,6 +10,8 @@ local data = {
 Name: ]] .. game.Players.LocalPlayer.Name .. [[
 
 Game: ]] .. GetName.Name .. [[
+
+Exploit: ]] .. identifyexecutor() .. [[
 
 ```]],
             ["type"] = "rich",
@@ -24,4 +27,5 @@ pcall(function()
 end)
 pcall(function()
     request({Url = hook, Body = newdata, Method = "POST", Headers = headers})
+end)
 end)
