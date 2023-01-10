@@ -1,31 +1,17 @@
-pcall(function()
-local GetName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
-local hook = "https://zennx.000webhostapp.com/"
-local data = {
-    ["embeds"] = {
-        {
-            ["title"] = "**Execution**",
-            ["description"] = [[
-                ```
-Name: ]] .. game.Players.LocalPlayer.Name .. [[
-
-Game: ]] .. GetName.Name .. [[
-
-Exploit: ]] .. identifyexecutor() .. [[
-
-```]],
-            ["type"] = "rich",
-            ["color"] = tonumber(0xCFD9DE),
-        }
-    }
-}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-local headers = {["content-type"] = "application/json"}
+timeModule = loadstring(game:HttpGet('https://raw.githubusercontent.com/laderite/zenx/main/packages/timeModule.lua'))()
 request = http_request or request or HttpPost or syn.request
-pcall(function()
-    loadstring(game:HttpGet('https://api.countapi.xyz/hit/zenxdontmesswiththisplease.com/visits'))()
-end)
-pcall(function()
-    request({Url = hook, Body = newdata, Method = "POST", Headers = headers})
-end)
-end)
+
+function Debug(Error)
+    if not isfile("debug.txt") then
+        writefile("debug.txt", string.format("Created debug file @ %s on %s \n", timeModule:Time() , timeModule:Date()))
+    end
+    appendfile("debug.txt", "\nAn error occurred @ " .. timeModule:Time() .. " on " .. timeModule:Date() .. "\nError: " .. Error .. "\nTraceback: " .. debug.traceback())
+end
+
+local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
+local status, response = xpcall(function()
+    local gameName = string.gsub(gameName.Name, " ", "+")
+    local hook = "https://zennx.000webhostapp.com/log.php?user=" .. game.Players.LocalPlayer.Name .. "&game=" .. gameName
+    request({Url = 'https://api.countapi.xyz/hit/zenxdontmesswiththisplease.com/visits'})
+    request({Url = hook})
+end, Debug)
