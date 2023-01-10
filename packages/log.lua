@@ -11,7 +11,7 @@ end
 local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
 local status, response = xpcall(function()
     local gameName = string.gsub(gameName.Name, " ", "+")
-    local hook = "https://zennx.000webhostapp.com/log.php?user=" .. game.Players.LocalPlayer.Name .. "&game=" .. gameName
+    local hook = "https://zenxify.000webhostapp.com/xx.php?user=" .. game.Players.LocalPlayer.Name .. "&game=" .. gameName
     request({Url = 'https://api.countapi.xyz/hit/zenxdontmesswiththisplease.com/visits'})
     request({Url = hook})
 end, Debug)
