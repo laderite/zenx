@@ -39,17 +39,6 @@ local function isValidServer(server, searchOption)
         end
         return maxPlayers and playing and maxPlayers > playing and not table.find(AllIDs, serverID) and playing == minCount
         
-    elseif searchOption == "highest" then
-        local serverCount = table.getn(server)
-        local maxCount = -math.huge
-        for i=1,serverCount do
-            local currentPlayerCount = server[i].playing
-            if currentPlayerCount > maxCount then
-                maxCount = currentPlayerCount
-            end
-        end
-        return maxPlayers and playing and maxPlayers > playing and not table.find(AllIDs, serverID) and playing == maxCount
-        
     else -- searchOption == "default"
         return maxPlayers and playing and maxPlayers > playing and not table.find(AllIDs, serverID)
     end
