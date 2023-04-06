@@ -578,6 +578,8 @@ function ZenLibrary:CreateMenu(Settings)
                 Toggle.TextLabel.TextTransparency = 1
                 Toggle.Visible = true
                 Toggle.Parent = Section.Holder
+                
+                local toggleHandler = {}
 
                 toggleSettings.CurrentValue = false
 
