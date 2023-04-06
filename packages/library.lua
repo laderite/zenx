@@ -579,6 +579,9 @@ function ZenLibrary:CreateMenu(Settings)
                 Toggle.Visible = true
                 Toggle.Parent = Section.Holder
 
+                local toggleHandler = {}
+                toggleHandler.CurrentValue = false
+
                 if not toggleHandler.CurrentValue then
                     Toggle.Status.ToggleBckg.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
                     Toggle.Status.ToggleBckg.UIStroke.Transparency = 0
