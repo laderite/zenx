@@ -18,7 +18,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 -- UI
-local Zen = game:GetObjects("rbxassetid://13015216417")[1]
+local Zen = game:GetObjects("rbxassetid://13015286097")[1]
 Zen.Menu.Visible = false
 Zen.Parent = CoreGui
 --[[if gethui then
@@ -659,6 +659,7 @@ function ZenLibrary:CreateMenu(Settings)
                 local Textbox = ExampleSection.Holder.Textbox:Clone()
 
                 Textbox.Name = TextboxSettings.Name
+                Textbox.Status.TextBox.PlaceholderText = "..."
                 Textbox.TextLabel.Text = TextboxSettings.Name
                 Textbox.BackgroundTransparency = 1
                 Textbox.UIStroke.Transparency = 1
@@ -797,7 +798,6 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	end
 end)
 
-return ZenLibrary
 
 --[[local men = ZenLibrary:CreateMenu({
    Name = "Zen Example Window",
@@ -868,4 +868,3 @@ se3c:CreateButton({Name = "Infinite Stamina 2 "})
 se3c:CreateButton({Name = "Infinite Gems 2 "})
 
 men:Load()]]
-
