@@ -699,6 +699,13 @@ function ZenLibrary:CreateMenu(Settings)
                         end
                     end
                 end)
+
+                function textBoxHandler:Set(NewButton)
+                    Textbox.TextLabel.Text = NewButton
+                    Textbox.Name = NewButton
+                end
+    
+                return textBoxHandler
             end
 
             function elementHandler:CreateButton(ButtonSettings)
