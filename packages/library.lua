@@ -4,15 +4,11 @@
 ]]
 
 local Release = "v1.0"
-local NotificationDuration = 0.5
 local LibraryFolder = "ZenXLibrary"
 local ConfigurationFolder = LibraryFolder .. "/Config"
 local ConfigurationExtension = ".znx"
 
-local ZenLibrary = {
-    Flags = {},
-    Themes = {},   
-}
+local ZenLibrary = {Flags = {}, Themes = {},   }
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -22,7 +18,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 -- UI
-local Zen = game:GetObjects("rbxassetid://12914735224")[1]
+local Zen = game:GetObjects("rbxassetid://13015216417")[1]
 Zen.Menu.Visible = false
 Zen.Parent = CoreGui
 --[[if gethui then
