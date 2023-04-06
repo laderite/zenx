@@ -566,11 +566,11 @@ function ZenLibrary:CreateMenu(Settings)
                 return Slider
             end
 
-            function elementHandler:CreateToggle(toggleHandler)
+            function elementHandler:CreateToggle(toggleSettings)
 
                 local Toggle = ExampleSection.Holder.Toggle:Clone()
-                Toggle.Name = toggleHandler.Name
-                Toggle.TextLabel.Text = toggleHandler.Name
+                Toggle.Name = toggleSettings.Name
+                Toggle.TextLabel.Text = toggleSettings.Name
                 Toggle.Status.ToggleBckg.BackgroundTransparency = 1
                 Toggle.Status.ToggleBckg.UIStroke.Transparency = 1
                 Toggle.BackgroundTransparency = 1
@@ -579,8 +579,7 @@ function ZenLibrary:CreateMenu(Settings)
                 Toggle.Visible = true
                 Toggle.Parent = Section.Holder
 
-                local toggleHandler = {}
-                toggleHandler.CurrentValue = false
+                toggleSettings.CurrentValue = false
 
                 if not toggleHandler.CurrentValue then
                     Toggle.Status.ToggleBckg.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
@@ -600,27 +599,27 @@ function ZenLibrary:CreateMenu(Settings)
                 end)
 
                 Toggle.MouseButton1Click:Connect(function()
-                    if toggleHandler.CurrentValue then
-                        toggleHandler.CurrentValue = false
+                    if toggleSettings.CurrentValue then
+                        toggleSettings.CurrentValue = false
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(29, 29, 29)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Transparency = 0}):Play()
                     else
-                        toggleHandler.CurrentValue = true
+                        toggleSettings.CurrentValue = true
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 213, 255)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
                     end
 
                     local Success, Response = pcall(function()
-                        toggleHandler.Callback(toggleHandler.CurrentValue)
+                        toggleSettings.Callback(toggleSettings.CurrentValue)
                     end)
                     if not Success then
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(40, 0, 0)}):Play()
                         TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(76, 0, 0)}):Play()
                         Toggle.TextLabel.Text = "Callback Error"
-                        warn("» Zen X Callback Error ("..TextboxSettings.Name..")\n" ..tostring(Response))
+                        warn("» Zen X Callback Error ("..toggleSettings.Name..")\n" ..tostring(Response))
                         wait(1)
-                        Toggle.TextLabel.Text = toggleHandler.Name
+                        Toggle.TextLabel.Text = toggleSettings.Name
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play() -- Still
                         TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                     end
@@ -628,18 +627,18 @@ function ZenLibrary:CreateMenu(Settings)
 
                 function toggleHandler:Set(newValue)
                     if newValue then
-                        toggleHandler.CurrentValue = false
+                        toggleSettings.CurrentValue = false
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(29, 29, 29)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Transparency = 0}):Play()
                     else
-                        toggleHandler.CurrentValue = true
+                        toggleSettings.CurrentValue = true
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 213, 255)}):Play()
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg.UIStroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
                     end
 
                     local Success, Response = pcall(function()
-                        toggleHandler.Callback(toggleHandler.CurrentValue)
+                        toggleSettings.Callback(toggleSettings.CurrentValue)
                     end)
                     if not Success then
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(40, 0, 0)}):Play()
@@ -647,7 +646,7 @@ function ZenLibrary:CreateMenu(Settings)
                         Toggle.TextLabel.Text = "Callback Error"
                         warn("» Zen X Callback Error ("..TextboxSettings.Name..")\n" ..tostring(Response))
                         wait(1)
-                        Toggle.TextLabel.Text = toggleHandler.Name
+                        Toggle.TextLabel.Text = toggleSettings.Name
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play() -- Still
                         TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                     end
