@@ -18,7 +18,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 -- UI
-local Zen = game:GetObjects("rbxassetid://13015286097")[1]
+local Zen = game:GetObjects("rbxassetid://13025734456")[1]
 Zen.Menu.Visible = false
 Zen.Parent = CoreGui
 --[[if gethui then
@@ -774,6 +774,146 @@ function ZenLibrary:CreateMenu(Settings)
                 end
     
                 return buttonHandler
+            end
+
+            function elementHandler:CreateDropdown(DropdownSettings)
+                local Dropdown = ExampleSection.Holder.Dropdown:Clone()
+                Dropdown.Name = DropdownSettings.Name
+                Dropdown.Main.Title.Text = DropdownSettings.Name
+                Dropdown.BackgroundTransparency = 1
+                Dropdown.UIStroke.Transparency = 1
+                Dropdown.Main.Image.ImageLabel.ImageTransparency = 1
+                Dropdown.Main.Image.ImageLabel.Rotation = 180
+                Dropdown.Main.Title.TextTransparency = 1
+                Dropdown.Visible = true
+                Dropdown.List.Visible = false
+                Dropdown.Parent = Section.Holder
+                local hovering = false
+
+                Dropdown.List.Holder.Option.Visible = false
+
+                if typeof(DropdownSettings.CurrentOption) == "string" then
+                    DropdownSettings.CurrentOption = {DropdownSettings.CurrentOption}
+                end
+                
+                if not DropdownSettings.MultipleOptions then
+                    DropdownSettings.CurrentOption = {DropdownSettings.CurrentOption[1]}
+                end
+                
+                if DropdownSettings.MultipleOptions then
+                    if #DropdownSettings.CurrentOption == 1 then
+                        Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                    elseif #DropdownSettings.CurrentOption == 0 then
+                        Dropdown.Main.Title.Text = DropdownSettings.Name .. " - "
+                    else
+                        Dropdown.Main.Title.Text = DropdownSettings.Name .. " - multiple.."
+                    end
+                else
+                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                end
+
+                Dropdown.MouseButton1Click:Connect(function()
+                    if Debounce then return end
+                    if Dropdown.List.Visible then
+                        Debounce = true
+                        for _, DropdownOpt in ipairs(Dropdown.List.Holder:GetChildren()) do
+                            if DropdownOpt.ClassName == "Frame" and DropdownOpt.Name ~= "Option" then
+                                TweenService:Create(DropdownOpt.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
+                                TweenService:Create(DropdownOpt.Seperator, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+                            end
+                        end
+                        TweenService:Create(Dropdown.Main.Image.ImageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Quint), {Rotation = 180}):Play()	
+                        Dropdown.List.Visible = false
+                        Debounce = false
+                    else
+                        Dropdown.List.Visible = true
+                        TweenService:Create(Dropdown.Main.Image.ImageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Quint), {Rotation = 0}):Play()	
+                        for _, DropdownOpt in ipairs(Dropdown.List.Holder:GetChildren()) do
+                            if DropdownOpt.ClassName == "Frame" and DropdownOpt.Name ~= "Option" then
+                                TweenService:Create(DropdownOpt.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
+                                TweenService:Create(DropdownOpt.Seperator, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {BackgroundTransparency = 0}):Play()
+                            end
+                        end
+                    end
+                end)
+
+                Dropdown.MouseEnter:Connect(function()
+                    TweenService:Create(Dropdown, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(42, 42, 42)}):Play()
+                    TweenService:Create(Dropdown.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
+                end)
+    
+                Dropdown.MouseLeave:Connect(function()
+                    TweenService:Create(Dropdown, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
+                    TweenService:Create(Dropdown.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
+                end)
+
+
+                for _, Option in ipairs(DropdownSettings.Options) do
+                    local DropdownOption = ExampleSection.Holder.Dropdown.List.Holder.Option:Clone()
+                    DropdownOption.Name = Option
+                    DropdownOption.Title.Text = Option
+                    DropdownOption.Parent = Dropdown.List.Holder
+                    DropdownOption.Visible = true
+    
+                    if DropdownSettings.CurrentOption == Option then
+                        DropdownOption.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                        DropdownOption.Title.TextColor3 = Color3.fromRGB(175, 175, 175)
+                    end
+    
+                    DropdownOption.BackgroundTransparency = 1
+                    DropdownOption.Title.TextTransparency = 1
+    
+                    DropdownOption.ZIndex = 50
+                    DropdownOption.MouseButton1Click:Connect(function()
+                        if not DropdownSettings.MultipleOptions and table.find(DropdownSettings.CurrentOption, Option) then 
+                            return
+                        end
+    
+                        if table.find(DropdownSettings.CurrentOption, Option) then
+                            table.remove(DropdownSettings.CurrentOption, table.find(DropdownSettings.CurrentOption, Option))
+                            if DropdownSettings.MultipleOptions then
+                                if #DropdownSettings.CurrentOption == 1 then
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                                elseif #DropdownSettings.CurrentOption == 0 then
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - "
+                                else
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - multiple.."
+                                end
+                            else
+                                Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                            end
+                        else
+                            if not DropdownSettings.MultipleOptions then
+                                table.clear(DropdownSettings.CurrentOption)
+                            end
+                            table.insert(DropdownSettings.CurrentOption, Option)
+                            if DropdownSettings.MultipleOptions then
+                                if #DropdownSettings.CurrentOption == 1 then
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                                elseif #DropdownSettings.CurrentOption == 0 then
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - "
+                                else
+                                    Dropdown.Main.Title.Text = DropdownSettings.Name .. " - multiple.."
+                                end
+                            else
+                                Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                            end
+                        end
+                        
+    
+                        DropdownSettings.Callback(DropdownSettings.CurrentOption)	
+                    end)
+                end
+                
+                for _, droption in ipairs(Dropdown.List.Holder:GetChildren()) do
+                    if droption.ClassName == "Frame" and droption.Name ~= "Option" then
+                        if not table.find(DropdownSettings.CurrentOption, droption.Name) then
+                            droption.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+                        else
+                            droption.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                        end
+                    end
+                end
             end
 
             return elementHandler
