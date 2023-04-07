@@ -5,7 +5,7 @@
 
 local Release = "v1.0"
 local LibraryFolder = "ZenXLibrary"
-local ConfigurationFolder = LibraryFolder .. "/Config"
+local ConfigurationFolder = LibraryFolder .. "/Configurations"
 local ConfigurationExtension = ".znx"
 
 local ZenLibrary = {Flags = {}, Themes = {},   }
@@ -18,7 +18,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 -- UI
-local Zen = game:GetObjects("rbxassetid://13025734456")[1]
+local Zen = game:GetObjects("rbxassetid://13035496745")[1]
 Zen.Menu.Visible = false
 Zen.Parent = CoreGui
 --[[if gethui then
@@ -96,45 +96,27 @@ local function AddDraggingFunctionality(DragPoint, Main)
 	end)
 end   
 
-local function PackColor(Color)
-	return {R = Color.R * 255, G = Color.G * 255, B = Color.B * 255}
-end    
-
-local function UnpackColor(Color)
-	return Color3.fromRGB(Color.R, Color.G, Color.B)
+local function LoadConfiguration(Configuration)
+	--[[local Data = HttpService:JSONDecode(Configuration)
+	for FlagName, FlagValue in next, Data do
+		if ZenLibrary.Flags[FlagName] then
+			spawn(function() 
+				if ZenLibrary.Flags[FlagName].CurrentValue or ZenLibrary.Flags[FlagName].CurrentText or ZenLibrary.Flags[FlagName].CurrentOption then ZenLibrary.Flags[FlagName]:Set(FlagValue) end  
+			end)
+		else
+            print'error'
+		end
+	end]]
 end
 
--- Define the color range you want to loop through
-local colorRange = {
-    Color3.fromRGB(255, 0, 0), -- Red
-    Color3.fromRGB(255, 255, 0), -- Yellow
-    Color3.fromRGB(0, 255, 0), -- Green
-    Color3.fromRGB(0, 255, 255), -- Cyan
-    Color3.fromRGB(0, 0, 255), -- Blue
-    Color3.fromRGB(255, 0, 255) -- Magenta
-}
-
--- Find all descendants of the Zen Script Hub Library
-local descendants = game.CoreGui['Zen Script Hub Library']:GetDescendants()
-
--- Create a table to hold frames with specified transparency values
-local framesToChange = {}
-
--- Loop through the descendants and check the transparency of frames
-for _, descendant in pairs(descendants) do
-    if descendant:IsA("Frame") and descendant.Name == "ToggleBckg" or descendant.Name == "Progress" then
-        table.insert(framesToChange, descendant)
-    end
+local function SaveConfiguration()
+	--[[if not CEnabled then return end
+	local Data = {}
+	for i,v in pairs(ZenLibrary.Flags) do
+		Data[i] = v.CurrentValue or v.CurrentKeybind or v.CurrentOption or v.Color
+	end	
+	writefile(ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension, tostring(HttpService:JSONEncode(Data)))]]
 end
-
--- Loop through the frames and set their background colors to the RGB loop
-task.spawn(function()
-while wait() do
-    for i, frame in pairs(framesToChange) do
-        frame.BackgroundColor3 = colorRange[(i-1) % #colorRange + 1]
-    end
-end
-end)
 
 function hideMenu()
     Debounce = true
@@ -436,7 +418,7 @@ function ZenLibrary:CreateMenu(Settings)
 		if not Settings.ConfigurationSaving.FileName then
 			Settings.ConfigurationSaving.FileName = tostring(game.PlaceId)
 		end
-		if not isfolder(LibraryFolder.."/".."Configuration Folders") then
+		if not isfolder(LibraryFolder.."/".."Configurations") then
 			
 		end
 		if Settings.ConfigurationSaving.Enabled == nil then
@@ -518,7 +500,7 @@ function ZenLibrary:CreateMenu(Settings)
                 -- title,min,max,start,inc,callback
                 local min = sliderHandler.Min
                 local max = sliderHandler.Max
-                local start = sliderHandler.Default
+                local start = sliderHandler.CurrentValue
                 local inc = sliderHandler.Increment
                 local suffix = sliderHandler.Suffix
             
@@ -548,22 +530,30 @@ function ZenLibrary:CreateMenu(Settings)
                     value.Text = tostring(Val) .. suffix
                     Slider.Value = Val
                     sliderHandler.Callback(Slider.Value)
+                    SaveConfiguration()
                 end
             
                 SliderMain.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end end)
                 SliderMain.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end end)
                 game:GetService("UserInputService").InputChanged:Connect(function(input) if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then move(input) end end)
             
-                function Slider:Set(val)
+                function sliderHandler:Set(val)
                     Slider.Value = val
                     local a = tostring(val and (val / max) * (max - min) + min) or 0
                     value.Text = tostring(a) .. suffix
                     SliderMain.Bar.Progress.Size = UDim2.new((val or 0 - min) / (max - min), 0, 1, 0)
                     sliderHandler.Callback(Slider.Value)
+                    SaveConfiguration()
                 end	
             
-                Slider:Set(start)
-                return Slider
+                sliderHandler:Set(start)
+
+                if Settings.ConfigurationSaving then
+                    if Settings.ConfigurationSaving.Enabled and sliderHandler.Flag then
+                        ZenLibrary.Flags[sliderHandler.Flag] = sliderHandler
+                    end
+                end    
+                return sliderHandler
             end
 
             function elementHandler:CreateToggle(toggleSettings)
@@ -578,12 +568,8 @@ function ZenLibrary:CreateMenu(Settings)
                 Toggle.TextLabel.TextTransparency = 1
                 Toggle.Visible = true
                 Toggle.Parent = Section.Holder
-                
-                local toggleHandler = {}
 
-                toggleSettings.CurrentValue = false
-
-                if not toggleHandler.CurrentValue then
+                if not toggleSettings.CurrentValue then
                     Toggle.Status.ToggleBckg.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
                     Toggle.Status.ToggleBckg.UIStroke.Transparency = 0
                     Toggle.Status.ToggleBckg.UIStroke.Color = Color3.fromRGB(50, 50, 50)
@@ -625,9 +611,11 @@ function ZenLibrary:CreateMenu(Settings)
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play() -- Still
                         TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                     end
+                    SaveConfiguration()
                 end)
 
-                function toggleHandler:Set(newValue)
+                function toggleSettings:Set(newValue)
+                    print"called!"
                     if newValue then
                         toggleSettings.CurrentValue = false
                         game:GetService('TweenService'):Create(Toggle.Status.ToggleBckg, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(29, 29, 29)}):Play()
@@ -652,13 +640,19 @@ function ZenLibrary:CreateMenu(Settings)
                         TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play() -- Still
                         TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                     end
+                    SaveConfiguration()
                 end
 
-                return toggleHandler
+                if Settings.ConfigurationSaving then
+                    if Settings.ConfigurationSaving.Enabled and toggleSettings.Flag then
+                        ZenLibrary.Flags[toggleSettings.Flag] = toggleSettings
+                    end
+                end
+    
+                return toggleSettings
             end
 
             function elementHandler:CreateTextbox(TextboxSettings)
-                local textBoxHandler = {}
                 local errored = false
                 local Textbox = ExampleSection.Holder.Textbox:Clone()
 
@@ -681,8 +675,9 @@ function ZenLibrary:CreateMenu(Settings)
                 end)
     
                 Textbox.Status.TextBox.FocusLost:Connect(function()
+                    TextboxSettings.CurrentText = Textbox.Status.TextBox.Text
                     local Success, Response = pcall(function()
-                        TextboxSettings.Callback(Textbox.Status.TextBox.Text)
+                        TextboxSettings.Callback(TextboxSettings.CurrentText)
                     end)
                     if not Success then
                         TweenService:Create(Textbox, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(40, 0, 0)}):Play() -- ERROR
@@ -702,18 +697,45 @@ function ZenLibrary:CreateMenu(Settings)
                             Textbox.Status.TextBox.Text = ""
                         end
                     end
+                    SaveConfiguration()
                 end)
 
-                function textBoxHandler:Set(NewButton)
-                    Textbox.TextLabel.Text = NewButton
-                    Textbox.Name = NewButton
+                function TextboxSettings:Set(NewButton)
+                    TextboxSettings.CurrentText = NewButton
+                    local Success, Response = pcall(function()
+                        TextboxSettings.Callback(TextboxSettings.CurrentText)
+                    end)
+                    if not Success then
+                        TweenService:Create(Textbox, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(40, 0, 0)}):Play() -- ERROR
+                        TweenService:Create(Textbox.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(76, 0, 0)}):Play()
+                        TweenService:Create(Textbox.Status.TextBox.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(76, 0, 0)}):Play()
+                        Textbox.TextLabel.Text = "Callback Error"
+                        warn("» Zen X Callback Error ("..TextboxSettings.Name..")\n" ..tostring(Response))
+                        errored = true
+                        wait(1)
+                        errored = false
+                        Textbox.TextLabel.Text = TextboxSettings.Name
+                        TweenService:Create(Textbox, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play() -- Still
+                        TweenService:Create(Textbox.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
+                        TweenService:Create(Textbox.Status.TextBox.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
+                    else
+                        if TextboxSettings.RemoveTextAfterFocusLost then
+                            Textbox.Status.TextBox.Text = ""
+                        end
+                    end
+                    SaveConfiguration()
+                end
+
+                if Settings.ConfigurationSaving then
+                    if Settings.ConfigurationSaving.Enabled and TextboxSettings.Flag then
+                        ZenLibrary.Flags[TextboxSettings.Flag] = TextboxSettings
+                    end
                 end
     
-                return textBoxHandler
+                return TextboxSettings
             end
 
             function elementHandler:CreateButton(ButtonSettings)
-                local buttonHandler = {}
                 local hovering = false
                 local errored = false
 
@@ -768,12 +790,12 @@ function ZenLibrary:CreateMenu(Settings)
                     TweenService:Create(Button.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Color = Color3.fromRGB(50, 50, 50)}):Play()
                 end)
     
-                function buttonHandler:Set(NewButton)
+                function ButtonSettings:Set(NewButton)
                     Button.Title.Text = NewButton
                     Button.Name = NewButton
                 end
     
-                return buttonHandler
+                return ButtonSettings
             end
 
             function elementHandler:CreateDropdown(DropdownSettings)
@@ -901,7 +923,8 @@ function ZenLibrary:CreateMenu(Settings)
                         end
                         
     
-                        DropdownSettings.Callback(DropdownSettings.CurrentOption)	
+                        DropdownSettings.Callback(DropdownSettings.CurrentOption)
+                        SaveConfiguration()	
                     end)
                 end
                 
@@ -914,6 +937,47 @@ function ZenLibrary:CreateMenu(Settings)
                         end
                     end
                 end
+
+                function DropdownSettings:Set(NewOption)
+                    if typeof(DropdownSettings.CurrentOption) == "string" then
+                        DropdownSettings.CurrentOption = {DropdownSettings.CurrentOption}
+                    end
+                    
+                    if not DropdownSettings.MultipleOptions then
+                        DropdownSettings.CurrentOption = {DropdownSettings.CurrentOption[1]}
+                    end
+                    
+                    if DropdownSettings.MultipleOptions then
+                        if #DropdownSettings.CurrentOption == 1 then
+                            Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                        elseif #DropdownSettings.CurrentOption == 0 then
+                            Dropdown.Main.Title.Text = DropdownSettings.Name .. " - "
+                        else
+                            Dropdown.Main.Title.Text = DropdownSettings.Name .. " - multiple.."
+                        end
+                    else
+                        Dropdown.Main.Title.Text = DropdownSettings.Name .. " - " .. DropdownSettings.CurrentOption[1]
+                    end
+
+                    DropdownSettings.Callback(NewOption)
+                    for _, droption in ipairs(Dropdown.List.Holder:GetChildren()) do
+                        if droption.ClassName == "Frame" and droption.Name ~= "Option" then
+                            if not table.find(DropdownSettings.CurrentOption, droption.Name) then
+                                droption.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+                            else
+                                droption.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                            end
+                        end
+                    end
+                end
+
+                if Settings.ConfigurationSaving then
+                    if Settings.ConfigurationSaving.Enabled and DropdownSettings.Flag then
+                        ZenLibrary.Flags[DropdownSettings.Flag] = DropdownSettings
+                    end
+                end    
+                
+                return DropdownSettings
             end
 
             return elementHandler
@@ -948,5 +1012,17 @@ UserInputService.InputBegan:Connect(function(input, processed)
 		end
 	end
 end)
+
+-[[function ZenLibrary:LoadConfiguration()
+	if CEnabled then
+		pcall(function()
+			if isfile(ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension) then
+                print('loading ' .. ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension)
+				LoadConfiguration(readfile(ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension))
+			end
+		end)
+	end
+end
+task.delay(3.5, ZenLibrary.LoadConfiguration, ZenLibrary)]]
 
 return ZenLibrary
