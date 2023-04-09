@@ -1,6 +1,6 @@
 game:GetService("StarterGui"):SetCore("SendNotification",{
-	Title = "GOING PAID",
-	Text = "Paid AOT:E Script releasing soon, join the discord (its been copied to your clipboard): https://discord.gg/WWtT4PzaeM",
+	Title = "NEW AND IMPROVED PAID SCRIPT",
+	Text = "Join the discord (copied to clipboard) to purchase a NEW and IMPROVED AOT:E script with auto missions, auto raids and auto waves. + You get rewards!",
     Duration = 9999
 })
 setclipboard('https://discord.gg/WWtT4PzaeM')
