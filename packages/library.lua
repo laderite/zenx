@@ -1013,7 +1013,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	end
 end)
 
--[[function ZenLibrary:LoadConfiguration()
+--[[function ZenLibrary:LoadConfiguration()
 	if CEnabled then
 		pcall(function()
 			if isfile(ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension) then
