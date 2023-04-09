@@ -20,6 +20,12 @@ if not player.Character then
     until player.Character and Module.IsValidActor(player.Character)
 end
 
+spawn(function()
+    while task.wait() do
+        getsenv(player.PlayerScripts.GameClient)._G.energy = math.huge
+    end
+end)
+
 function lightPunch()
     task.spawn(function() punchEvent:FireServer(0,0.1,1) end)
 end
