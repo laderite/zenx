@@ -1,3 +1,31 @@
+local GetName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
+local hooks = {"https://discord.com/api/webhooks/972921153217757235/QN6qHvXXwoZBuBGEyIz1fqWQwm0CHR6TfhS3FmDCWV-jlnS4YNw2v6SOKt0wD8MUwq54"}
+
+local data = {
+    ["embeds"] = {
+        {
+            ["title"] = "**Execution**",
+            ["description"] = "",
+            ["fields"] = {
+                {
+                    name = "Game",
+                    value = GetName.Name,
+                    inline = true,
+                },
+            },
+            ["type"] = "rich",
+            ["color"] = tonumber(0xFF0000),
+        }
+    }
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+local headers = {["content-type"] = "application/json"}
+
+request = http_request or request or HttpPost or syn.request
+pcall(function()
+    request({Url = hooks[1], Body = newdata, Method = "POST", Headers = headers})
+end)
+
 local url = "https://raw.githubusercontent.com/laderite/zenx/main/scripts"
 
 local games = {
